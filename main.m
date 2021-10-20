@@ -18,7 +18,7 @@ ICL   = matriz(:,4);  % Corrente da fase C no terminal local
 % ------------------------------------------------------------------------------
 % 3.1 Configuracoes sobre o sistema e sobre a amostragem
 f          = 60;                 % Frequencia do sistema de potencia
-na         = 16;                 % Numero de amostras por ciclo
+na         = 32;                 % Numero de amostras por ciclo
 fa         = na*f;               % Frequencia de amostragem
 Ta         = 1/fa;               % Periodo de amostragem
 ciclosbuff = 4;                  % Numero de ciclos armazenados no buffer
@@ -26,14 +26,11 @@ tambuffer  = ciclosbuff*na;      % Numero de amostras no buffer
 iaL_ied    = zeros(1,tambuffer); % Tamanho do buffer para corrente na fase A do terminal local 
 ibL_ied    = zeros(1,tambuffer); % Tamanho do buffer para corrente na fase B do terminal local 
 icL_ied    = zeros(1,tambuffer); % Tamanho do buffer para corrente na fase C do terminal local
-iaR_ied    = zeros(1,tambuffer); % Tamanho do buffer para corrente na fase A do terminal remoto
-ibR_ied    = zeros(1,tambuffer); % Tamanho do buffer para corrente na fase B do terminal remoto
-icR_ied    = zeros(1,tambuffer); % Tamanho do buffer para corrente na fase C do terminal remoto
 % ------------------------------------------------------------------------------
 % 3.2 Especificacao do filtro de entrada do IED
 %     a) Dados do filtro Butterworth
 fp            = 90;  % Frequencia maxima da banda de passagem, em [Hz]
-hc            = 3;   % Harmonica que se deseja eliminar
+hc            = 16;   % Harmonica que se deseja eliminar
 fs            = hc*f;% Frequencia da banda de rejeicao, em [Hz]
 Amax          = 3; % Atenuacao fora da banda de passagem, [dB]
 Amin          = 32; % Atenuacao fora da banda de passagem, [dB]
@@ -72,9 +69,6 @@ for aux=1:length(IALf)
     IALfr(cont)  = IALf(aux);
     IBLfr(cont)  = IBLf(aux); 
     ICLfr(cont)  = ICLf(aux);
-    IARfr(cont)  = IARf(aux);
-    IBRfr(cont)  = IBRf(aux);
-    ICRfr(cont)  = ICRf(aux);
     cont         = cont + 1;
   end
 end
@@ -96,9 +90,6 @@ while tam<=length(tempor)
   iaL_ied(posbuffer) = IALfr(tam); % Buffer de corrente da fase A no terminal Local
   ibL_ied(posbuffer) = IBLfr(tam); % Buffer de corrente da fase B no terminal Local
   icL_ied(posbuffer) = ICLfr(tam); % Buffer de corrente da fase C no terminal Local
-  iaR_ied(posbuffer) = IARfr(tam); % Buffer de corrente da fase A no terminal Remoto
-  ibR_ied(posbuffer) = IBRfr(tam); % Buffer de corrente da fase B no terminal Remoto
-  icR_ied(posbuffer) = ICRfr(tam); % Buffer de corrente da fase C no terminal Remoto
   % ----------------------------------------------------------------------------
   % 4.2 Monta o vetor de correntes para c�lculo de Fourier
   % ----------------------------------------------------------------------------
@@ -106,16 +97,10 @@ while tam<=length(tempor)
     iaL_iedF(posbuffer) = fourier([iaL_ied(tambuffer-(na-posbuffer)+1:tambuffer) iaL_ied(1:posbuffer)],na,fa,f);
     ibL_iedF(posbuffer) = fourier([ibL_ied(tambuffer-(na-posbuffer)+1:tambuffer) ibL_ied(1:posbuffer)],na,fa,f);
     icL_iedF(posbuffer) = fourier([icL_ied(tambuffer-(na-posbuffer)+1:tambuffer) icL_ied(1:posbuffer)],na,fa,f);
-    iaR_iedF(posbuffer) = fourier([iaR_ied(tambuffer-(na-posbuffer)+1:tambuffer) iaR_ied(1:posbuffer)],na,fa,f);
-    ibR_iedF(posbuffer) = fourier([ibR_ied(tambuffer-(na-posbuffer)+1:tambuffer) ibR_ied(1:posbuffer)],na,fa,f);
-    icR_iedF(posbuffer) = fourier([icR_ied(tambuffer-(na-posbuffer)+1:tambuffer) icR_ied(1:posbuffer)],na,fa,f);
   else
     iaL_iedF(posbuffer) = fourier(iaL_ied(posbuffer-na+1:posbuffer),na,fa,f);
     ibL_iedF(posbuffer) = fourier(ibL_ied(posbuffer-na+1:posbuffer),na,fa,f);
     icL_iedF(posbuffer) = fourier(icL_ied(posbuffer-na+1:posbuffer),na,fa,f);
-    iaR_iedF(posbuffer) = fourier(iaR_ied(posbuffer-na+1:posbuffer),na,fa,f);
-    ibR_iedF(posbuffer) = fourier(ibR_ied(posbuffer-na+1:posbuffer),na,fa,f);
-    icR_iedF(posbuffer) = fourier(icR_ied(posbuffer-na+1:posbuffer),na,fa,f);    
   end
   fprintf('Amostra: %03.f de %03.f amostras\n',tam, length(tempor));
   % ----------------------------------------------------------------------------
@@ -124,9 +109,6 @@ while tam<=length(tempor)
   temp_iaL_iedF(tam) = iaL_iedF(posbuffer);
   temp_ibL_iedF(tam) = ibL_iedF(posbuffer);
   temp_icL_iedF(tam) = icL_iedF(posbuffer);
-  temp_iaR_iedF(tam) = iaR_iedF(posbuffer);
-  temp_ibR_iedF(tam) = ibR_iedF(posbuffer);
-  temp_icR_iedF(tam) = icR_iedF(posbuffer);  
   % ----------------------------------------------------------------------------
   posbuffer = posbuffer + 1;
   tam       = tam + 1;
