@@ -116,20 +116,30 @@ function [temp_iaL_iedF, temp_ibL_iedF, temp_icL_iedF ] = adquireSinal(filename)
     tam       = tam + 1;
   end
 
+  neutro = IALfr + IBLfr + ICLfr;
+
   figure;
+  subplot(4, 1, 1);
   plot(IALfr,'r');
   hold on
-  plot(sqrt(2)*[temp_iaL_iedF.magnitude],'g');
+  plot(sqrt(2)*[temp_iaL_iedF.magnitude],'k');
+  title(["Fase A - " filename]);
 
-  figure;
-  plot(IBLfr,'b');
+  subplot(4, 1, 2);
+  plot(IBLfr,'g');
   hold on
-  plot(sqrt(2)*[temp_ibL_iedF.magnitude],'g');
+  plot(sqrt(2)*[temp_ibL_iedF.magnitude],'k');
+  title(["Fase B - " filename]);
 
-  figure;
-  plot(ICLfr,'k');
+  subplot(4, 1, 3);
+  plot(ICLfr,'b');
   hold on
-  plot(sqrt(2)*[temp_icL_iedF.magnitude],'g');
+  plot(sqrt(2)*[temp_icL_iedF.magnitude],'k');
+  title(["Fase C - " filename]);
+
+  subplot(4, 1, 4);
+  plot(neutro);
+  title(["Corrente de neutro - " filename]);
 endfunction
 [temp_iaL_iedF, temp_ibL_iedF, temp_icL_iedF ] = adquireSinal(filename);
 
