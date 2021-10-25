@@ -7,7 +7,7 @@ clear all;
 % ------------------------------------------------------------------------------
 % 2. Leitura do caso de simulacao
 % ------------------------------------------------------------------------------
-filename = 'rele10';
+filename = 'G1rele10';
 matriz = csvread([filename '.csv']);
 tempo = matriz(:,1);  % Sinal temporal no arquivo
 IAL   = matriz(:,2);  % Corrente da fase A no terminal local
@@ -18,7 +18,7 @@ ICL   = matriz(:,4);  % Corrente da fase C no terminal local
 % ------------------------------------------------------------------------------
 % 3.1 Configuracoes sobre o sistema e sobre a amostragem
 f          = 60;                 % Frequencia do sistema de potencia
-na         = 32;                 % Numero de amostras por ciclo
+na         = 16;                 % Numero de amostras por ciclo
 fa         = na*f;               % Frequencia de amostragem
 Ta         = 1/fa;               % Periodo de amostragem
 ciclosbuff = 4;                  % Numero de ciclos armazenados no buffer
@@ -114,6 +114,61 @@ while tam<=length(tempor)
   tam       = tam + 1;
 end
 
+figure;
 plot(IALfr,'r');
 hold on
-plot(sqrt(2)*[temp_iaL_iedF.magnitude],'g')
+plot(sqrt(2)*[temp_iaL_iedF.magnitude],'g');
+
+figure;
+plot(IBLfr,'b');
+hold on
+plot(sqrt(2)*[temp_ibL_iedF.magnitude],'g');
+
+figure;
+plot(ICLfr,'k');
+hold on
+plot(sqrt(2)*[temp_icL_iedF.magnitude],'g');
+
+% Modelamento das curvas da família IEEE ANSI
+
+m = 1:0.001:5;
+A = [28.2, 19.61, 0.0515];
+B = [0.1217, 0.491, 0.1140];
+p = [2, 2, 0.02];
+
+% Vamos plotar elas para ver o seu aspecto
+ta1 = (A(1)./(m.^p(1) - 1)) + B(1);
+ta2 = (A(2)./(m.^p(2) - 1)) + B(2);
+ta3 = (A(3)./(m.^p(3) - 1)) + B(3);
+
+figure;
+plot(m, ta1, m, ta2, m, ta3);
+xlim([0, 5]);
+ylim([0, 100]);
+legend("Extremamente inversa", "Muito inversa", "Moderadamente inversa");
+xlabel('m = I/Ipk');
+ylabel('ta [s]');
+title('Curvas do grupo ANSI');
+
+% Para determinar quanto tempo demora para atuar a proteção, vamos achar o máximo
+% valor de corrente para cada barra e quando esse máximo ocorre. Após isso, vamos
+% verificar em quanto tempo atuariam as proteções de cada barra e verificar se o
+% projeto está adequado
+
+% Correntes de pickup
+
+Ipk30 = 212,5;
+Ipk20 = 390;
+Ipk10 = 555;
+
+% Momento de corrente máxima na fase A, barra 30
+faseA_amplitude = [temp_iaL_iedF.magnitude];
+
+[max_value max_index] = max(faseA_amplitude);
+
+m30 = sqrt(2)*max_value/Ipk30;
+
+% Tempo de atuação do relé da barra 30:
+ta1_30 = (A(1)./(m30.*p(1) - 1)) + B(1)
+ta2_30 = (A(2)./(m30.*p(2) - 1)) + B(2)
+ta3_30 = (A(3)./(m30.*p(3) - 1)) + B(3)
