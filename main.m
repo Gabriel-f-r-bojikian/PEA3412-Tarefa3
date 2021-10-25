@@ -7,7 +7,7 @@ clear all;
 % ------------------------------------------------------------------------------
 % 2. Leitura do caso de simulacao
 % ------------------------------------------------------------------------------
-filename = 'G1rele10';
+filename = 'G1rele30';
 
 function [temp_iaL_iedF, temp_ibL_iedF, temp_icL_iedF ] = adquireSinal(filename)
   matriz = csvread([filename '.csv']);
@@ -171,7 +171,7 @@ title('Curvas do grupo ANSI');
 
 % Correntes de pickup
 
-Ipk30 = 212,5;
+Ipk30 = 212.5;
 Ipk20 = 390;
 Ipk10 = 555;
 
@@ -180,9 +180,14 @@ faseA_amplitude = [temp_iaL_iedF.magnitude];
 
 [max_value max_index] = max(faseA_amplitude);
 
-m30 = sqrt(2)*max_value/Ipk30;
+% Razão entre corrente de pickup e Corrente máxima do sinal
 
-% Tempo de atuação do relé da barra 30:
-ta1_30 = (A(1)./(m30.*p(1) - 1)) + B(1)
-ta2_30 = (A(2)./(m30.*p(2) - 1)) + B(2)
-ta3_30 = (A(3)./(m30.*p(3) - 1)) + B(3)
+m = sqrt(2)*max_value/Ipk30;
+if (m > 1)
+  % Tempo de atuação do relé da barra 30:
+  tempo_Atuacao_Extremamente_Inversa = (A(1)./(m.*p(1) - 1)) + B(1) % Extremamente Inversa
+  tempo_Atuacao_Muito_Inversa = (A(2)./(m.*p(2) - 1)) + B(2) % Muito Inversa
+  tempo_Atuacao_Moderadamente_Inversa = (A(3)./(m.*p(3) - 1)) + B(3) % Moderadamente inversa
+else
+  disp("m <= 1, tempo de atuacao -> + Inf");
+endif
