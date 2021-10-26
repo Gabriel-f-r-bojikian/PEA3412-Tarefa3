@@ -104,7 +104,7 @@ function [temp_iaL_iedF, temp_ibL_iedF, temp_icL_iedF ] = adquire_sinal(filename
     posbuffer = posbuffer + 1;
     tam       = tam + 1;
   end
-  disp("Lendo sinais de corrente...");
+  disp(["Lendo sinais de corrente do arquivo " filename ".csv: "]);
   neutro = IALfr + IBLfr + ICLfr;
 
   figure;
