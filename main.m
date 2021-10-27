@@ -3,7 +3,7 @@ fclose all;
 clear all;
 clc;
 
-filename = 'G2rele30';
+filename = 'G2rele10';
 
 if(isempty(strfind(filename, "10")) == 0) % 0 is true
   barra_detectada = 10;
@@ -46,10 +46,13 @@ faseC_amplitude = [temp_icL_iedF.magnitude];
 switch(barra_detectada)
   case(10)
     Ipk=Ipk10;
+    MT = 8
   case(20)
     Ipk=Ipk20;
+    MT = 5
   case(30)
     Ipk=Ipk30;
+    MT = 2
   otherwise
     Ipk = -999;
 endswitch
@@ -63,11 +66,11 @@ disp(["   Fase C: " num2str(valor_maximo_fase_C) " A"]);
 disp(["Corrente de pickup da barra " num2str(barra_detectada) ": " num2str(Ipk)]);
 
 % Calculo do tempo de atuacao para a familia de curvas ANSI
-m = sqrt(2)*max([valor_maximo_fase_A valor_maximo_fase_B valor_maximo_fase_C])/Ipk;
+m = sqrt(2)*max([valor_maximo_fase_A valor_maximo_fase_B valor_maximo_fase_C])/Ipk
 if (m > 1)
-  tempo_Atuacao_Extremamente_Inversa = (A(1)./(m.*p(1) - 1)) + B(1); % Extremamente Inversa
-  tempo_Atuacao_Muito_Inversa = (A(2)./(m.*p(2) - 1)) + B(2); % Muito Inversa
-  tempo_Atuacao_Moderadamente_Inversa = (A(3)./(m.*p(3) - 1)) + B(3); % Moderadamente inversa
+  tempo_Atuacao_Extremamente_Inversa = MT*((A(1)./(m.*p(1) - 1)) + B(1)); % Extremamente Inversa
+  tempo_Atuacao_Muito_Inversa = MT*((A(2)./(m.*p(2) - 1)) + B(2)); % Muito Inversa
+  tempo_Atuacao_Moderadamente_Inversa = MT*((A(3)./(m.*p(3) - 1)) + B(3)); % Moderadamente inversa
   
   disp(["\nTempo de atuacao para curva extremamente inversa " num2str(tempo_Atuacao_Extremamente_Inversa) " s"])
   disp(["Tempo de atuacao para curva muito inversa " num2str(tempo_Atuacao_Muito_Inversa) " s"])% tempo_Atuacao_Muito_Inversa = (A(2)./(m.*p(2) - 1)) + B(2); % Muito Inversa
