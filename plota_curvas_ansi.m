@@ -7,9 +7,13 @@ function plota_curvas_ansi(m, A, B, p)
     figure;
     plot(m, ta1, m, ta2, m, ta3);
     xlim([0, 5]);
-    ylim([0, 100]);
+    ylim([0, 20]);
     legend("Extremamente inversa", "Muito inversa", "Moderadamente inversa");
     xlabel('m = I/Ipk');
     ylabel('ta [s]');
-    title('Curvas do grupo ANSI');
+    title('Curvas da familia ANSI');
+    hold on;
+    x = 1;
+    plot([x,x], [-10,40], '--k');
+    legend("Extremamente inversa", "Muito inversa", "Moderadamente inversa", "m = 1");
 endfunction
