@@ -3,7 +3,7 @@ fclose all;
 clear all;
 clc;
 
-filename = 'B2rele30';
+filename = 'C2rele30';
 
 if(isempty(strfind(filename, "10")) == 0) % 0 is true
   barra_detectada = 10;
@@ -48,13 +48,13 @@ faseC_amplitude = [temp_icL_iedF.magnitude];
 switch(barra_detectada)
   case(10)
     Ipk=Ipk10;
-    MT = 1/5;
+    MT = 1/8;
   case(20)
     Ipk=Ipk20;
-    MT = 1/8;
+    MT = 1/12;
   case(30)
     Ipk=Ipk30;
-    MT = 1/14;
+    MT = 1/20;
   otherwise
     Ipk = -999;
 endswitch
@@ -68,7 +68,7 @@ disp(["   Fase C: " num2str(valor_maximo_fase_C) " A"]);
 disp(["Corrente de pickup da barra " num2str(barra_detectada) ": " num2str(Ipk)]);
 
 % Calculo do tempo de atuacao para a familia de curvas ANSI
-m = sqrt(2)*max([valor_maximo_fase_A valor_maximo_fase_B valor_maximo_fase_C])/Ipk
+m = max([valor_maximo_fase_A valor_maximo_fase_B valor_maximo_fase_C])/Ipk
 if (m > 1)
   tempo_Atuacao_Extremamente_Inversa = MT*((A(1)./(m.^p(1) - 1)) + B(1)); % Extremamente Inversa
   tempo_Atuacao_Muito_Inversa = MT*((A(2)./(m.^p(2) - 1)) + B(2)); % Muito Inversa
@@ -85,9 +85,9 @@ endif
 
 m = 1:0.01:10;
 
-ta_10 = (1/5)*((A(3)./(m.^p(3) - 1)) + B(3));
-ta_20 = (1/8)*((A(3)./(m.^p(3) - 1)) + B(3));
-ta_30 = (1/14)*((A(3)./(m.^p(3) - 1)) + B(3));
+ta_10 = (1/8)*((A(3)./(m.^p(3) - 1)) + B(3));
+ta_20 = (1/12)*((A(3)./(m.^p(3) - 1)) + B(3));
+ta_30 = (1/20)*((A(3)./(m.^p(3) - 1)) + B(3));
 
 figure;
 plot(m, ta_30, m, ta_20, m, ta_10);
@@ -108,9 +108,15 @@ x3 = 3;
 plot([x3,x3], [-10,10], '--k');
 hold on;
 plot([0,10], [0.5,0.5], '--k');
+hold on;
+plot([0,10], [0.4,0.4], '--k');
+hold on;
+plot([0,10], [0.3,0.3], '--k');
+hold on;
+plot([0,10], [0.2,0.2], '--k');
 % legend("Barra 30", "Barra 20", "Barra 10", "m = 1", "m = 2", "m = 3", "m = 4");
-text(5, 0.37, "Barra 10");
-text(5, 0.25, "Barra 20");
-text(5, 0.15, "Barra 30");
+text(5, 0.25, "Barra 10");
+text(5, 0.17, "Barra 20");
+text(5, 0.10, "Barra 30");
 xlabel("m = I/I_{pk}");
 ylabel("t_a [s]");
