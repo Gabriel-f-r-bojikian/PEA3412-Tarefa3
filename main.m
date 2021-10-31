@@ -71,5 +71,3 @@ if (m > 1)
 else
   disp("\nNao ha situacao sobrecorrente (m <= 1), rele nao atua");
 endif
-
-plota_coordenograma();
