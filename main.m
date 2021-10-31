@@ -1,3 +1,12 @@
+% ------------------------------------------------------------------------------------------- %
+%   PEA 3412 - Tarefa 3
+  
+%   Grupo G:
+%    - Gabriel Fernandes Rosa Bojikian, 9349221
+%    - Maurício Kenji Sanda, 10773190
+%    - Pedro César Igarashi, 10812071
+%
+% ------------------------------------------------------------------------------------------- %
 close all;
 fclose all;
 clear all;
@@ -5,7 +14,7 @@ clc;
 
 % Para ler algum arquivo .csv, digite o nome dele sem o sufixo na variável seguinte filename
 % Exemplo: Para ler o arquivo 'A1rele10.csv', escreva 'A1rele10' na variável filename
-filename = 'C2rele30';
+filename = 'G1rele10';
 
 barra_detectada = detecta_barra(filename);
 
