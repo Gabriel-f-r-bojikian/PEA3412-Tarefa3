@@ -22,7 +22,7 @@ Ipk30 = 212.5;
 Ipk20 = 390;
 Ipk10 = 555;
 
-% Momento de corrente máxima na fase A, barra 30
+% Vamos descobrir o valor máximo da corrente em cada fase
 faseA_amplitude = [temp_iaL_iedF.magnitude];
 faseB_amplitude = [temp_ibL_iedF.magnitude];
 faseC_amplitude = [temp_icL_iedF.magnitude];
@@ -57,9 +57,8 @@ disp(["   Fase C: " num2str(valor_maximo_fase_C) " A"]);
 disp(["Corrente de pickup da barra " num2str(barra_detectada) ": " num2str(Ipk) " A"]);
 
 % Calculo do tempo de atuacao para a familia de curvas ANSI
-I = max([valor_maximo_fase_A valor_maximo_fase_B valor_maximo_fase_C])
-Ipk
-m = I/Ipk
+I_max = max([valor_maximo_fase_A valor_maximo_fase_B valor_maximo_fase_C]);
+m = I_max/Ipk;
 
 if (m > 1)
   tempo_Atuacao_Moderadamente_Inversa = MT*((A./(m.^p - 1)) + B); % Moderadamente inversa
