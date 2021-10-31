@@ -22,15 +22,6 @@ Ipk30 = 212.5;
 Ipk20 = 390;
 Ipk10 = 555;
 
-% Vamos descobrir o valor máximo da corrente em cada fase
-faseA_amplitude = [temp_iaL_iedF.magnitude];
-faseB_amplitude = [temp_ibL_iedF.magnitude];
-faseC_amplitude = [temp_icL_iedF.magnitude];
-
-[valor_maximo_fase_A max_index] = max(faseA_amplitude);
-[valor_maximo_fase_B max_index] = max(faseB_amplitude);
-[valor_maximo_fase_C max_index] = max(faseC_amplitude);
-
 % Vamos agora utilizar a corrente de pickup e o multiplicador
 % de tempo adequados para cada barra
 
@@ -47,6 +38,17 @@ switch(barra_detectada)
   otherwise
     Ipk = -999;
 endswitch
+
+% Vamos descobrir o valor máximo da corrente em cada fase
+faseA_amplitude = [temp_iaL_iedF.magnitude];
+faseB_amplitude = [temp_ibL_iedF.magnitude];
+faseC_amplitude = [temp_icL_iedF.magnitude];
+
+[valor_maximo_fase_A max_index] = max(faseA_amplitude);
+[valor_maximo_fase_B max_index] = max(faseB_amplitude);
+[valor_maximo_fase_C max_index] = max(faseC_amplitude);
+
+% Vamos fazer os cálculos e gerar o relatório para o usuário
 
 disp(["\n\nAnalise de atuacao dos reles na barra " num2str(barra_detectada) "\n"]);
 
